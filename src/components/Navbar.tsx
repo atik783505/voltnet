@@ -2,8 +2,7 @@
 import { useState } from "react";
 import { Link, Button, Avatar } from "@heroui/react";
 import { usePathname } from "next/navigation";
-import { FiLogOut, FiSearch } from "react-icons/fi";
-import { BiTargetLock } from "react-icons/bi";
+import { FiLogOut,} from "react-icons/fi";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { authClient } from "@/lib/auth-client";
 
@@ -31,15 +30,16 @@ export default function Navbar() {
             console.error("Error signing out:", error);
         }
     };
+    const dashboardHref = user?.role ? `/dashboard/${user.role}` : '/dashboard';
     const links: NavLink[] = isLoggedIn 
         ? [
-            { name: "Dashboard", href: `/dashboard/user` },
-            { name: "Explore", href: "/stations" },
+            { name: "Dashboard", href: dashboardHref },
+            { name: "All Stations", href: "/stations" },
             { name: "Reservations", href: "/reservations" },
             { name: "Fleet", href: "/fleet" },
           ]
         : [
-            { name: "Explore", href: "/stations" },
+            { name: "All Stations", href: "/stations" },
             { name: "Fleet", href: "/fleet" },
           ];
     if (isPending) return <div className="h-16 w-full border-b border-slate-100 bg-white" />;
@@ -51,13 +51,13 @@ export default function Navbar() {
             <header className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
                 
                 {/* Left Side: Brand Logo & Search Bar */}
-                <div className="flex items-center gap-6 flex-1 max-w-xl">
+                <div className="flex items-center gap-6 max-w-xl">
                     <Link href="/" className="flex items-center gap-2 shrink-0">
                         <p className="font-bold text-xl text-blue-600 tracking-tight">VoltNet</p>
                     </Link>
 
                     {/* Search Bar */}
-                    <div className="hidden md:flex items-center relative w-full max-w-xs">
+                    {/* <div className="hidden md:flex items-center relative w-full max-w-xs">
                         <FiSearch className="absolute left-4 text-slate-400 text-lg" />
                         <input 
                             type="text" 
@@ -65,7 +65,7 @@ export default function Navbar() {
                             className="w-full h-10 pl-11 pr-11 bg-slate-50 border border-slate-200/80 rounded-full text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all"
                         />
                         <BiTargetLock className="absolute right-4 text-slate-400 text-xl cursor-pointer hover:text-blue-600 transition-colors" />
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Center: Dynamic Navigation Links */}

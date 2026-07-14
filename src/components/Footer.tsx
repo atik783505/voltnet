@@ -1,19 +1,22 @@
 'use client';
+import { usePathname } from "next/navigation";
 import React from "react";
 import { FiZap, FiGithub, FiTwitter, FiLinkedin, FiGlobe } from "react-icons/fi";
 
 export default function Footer() {
+    const pathname = usePathname();
     const currentYear = new Date().getFullYear();
+    if (pathname.includes('/dashboard')) return null;
 
     return (
         <footer className="w-full bg-slate-950 text-slate-400 relative overflow-hidden border-t border-slate-900 pt-16 pb-8 px-6">
-            
+
             {/* ─── BACKGROUND DECORATIONS ─── */}
             {/* Subtle blue ambient glow at the bottom center */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
-            
+
             <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 pb-12 border-b border-slate-900">
-                
+
                 {/* Brand Identity Column (4 Columns) */}
                 <div className="md:col-span-4 space-y-4">
                     <div className="flex items-center gap-2 text-white">
@@ -87,7 +90,7 @@ export default function Footer() {
                     <a href="#" className="hover:text-slate-400 transition-colors">Security Compliance</a>
                 </div>
             </div>
-            
+
         </footer>
     );
 }
