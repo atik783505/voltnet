@@ -30,7 +30,7 @@ export default function Navbar() {
             console.error("Error signing out:", error);
         }
     };
-    const dashboardHref = user?.role ? `/dashboard/${user.role}` : '/dashboard';
+    const dashboardHref = (user as any)?.role ? `/dashboard/${(user as any).role}` : '/dashboard';
     const links: NavLink[] = isLoggedIn 
         ? [
             { name: "Dashboard", href: dashboardHref },
@@ -103,9 +103,8 @@ export default function Navbar() {
                                 <IoSettingsOutline size={22} />
                             </button>
 
-                            {/* Avatar Component with Live User Data */}
                             <Link href="/my-profile" className="shrink-0">
-                                <Avatar size="sm" isBordered className="cursor-pointer border-slate-200 transition-transform hover:scale-105">
+                                <Avatar size="sm" className="cursor-pointer border border-slate-200 transition-transform hover:scale-105">
                                     <Avatar.Image 
                                         referrerPolicy="no-referrer" 
                                         alt={user?.name || "User"} 
@@ -120,7 +119,7 @@ export default function Navbar() {
                             {/* Sign Out Button */}
                             <Button
                                 size="sm"
-                                variant="solid"
+                                variant="primary"
                                 onClick={handleSignOut}
                                 className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 h-9 text-xs rounded-lg shadow-sm transition-all"
                             >
@@ -172,12 +171,21 @@ export default function Navbar() {
                     {isLoggedIn ? (
                         <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
                             <div className="flex items-center gap-3">
-                                <Avatar size="sm" src={user?.image || undefined} />
+                                <Avatar size="sm">
+                                    <Avatar.Image 
+                                        referrerPolicy="no-referrer" 
+                                        alt={user?.name || "User"} 
+                                        src={user?.image || undefined} 
+                                    />
+                                    <Avatar.Fallback>
+                                        {user?.name ? user.name.substring(0, 2).toUpperCase() : "VN"}
+                                    </Avatar.Fallback>
+                                </Avatar>
                                 <div className="text-sm font-medium text-slate-700">{user?.name}</div>
                             </div>
                             <Button
                                 size="sm"
-                                variant="solid"
+                                variant="primary"
                                 onClick={handleSignOut}
                                 className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold h-10 rounded-lg transition-colors"
                             >

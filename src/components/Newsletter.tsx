@@ -17,13 +17,15 @@ export default function Newsletter() {
                     Subscribe to receive tailored infrastructure installation guides and live station pricing discount updates.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-3 items-center max-w-md mx-auto pt-4">
-                    <Input 
-                        type="email" 
-                        placeholder="Enter your enterprise email" 
-                        className="bg-white border border-slate-200 rounded-xl text-sm"
-                        startContent={<FiMail className="text-slate-400 mr-1" size={16} />}
-                    />
+                <div className="flex flex-col sm:flex-row gap-3 items-center max-w-md mx-auto pt-4 w-full">
+                    <div className="relative w-full flex items-center">
+                        <FiMail className="absolute left-3.5 text-slate-400" size={16} />
+                        <Input 
+                            type="email" 
+                            placeholder="Enter your enterprise email" 
+                            className="bg-white border border-slate-200 rounded-xl text-sm pl-10 w-full"
+                        />
+                    </div>
                     <Button className="w-full sm:w-auto px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-10 rounded-xl transition-colors shadow-sm text-xs whitespace-nowrap">
                         Get Infrastructure Plan
                     </Button>

@@ -199,11 +199,11 @@ export default function Signup() {
 
                     {/* Submit Action Button */}
                     <Button 
-                        className="w-full mt-2 bg-[#4A5568] hover:bg-[#3A4454] text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm" 
+                        className="w-full mt-2 bg-[#4A5568] hover:bg-[#3A4454] text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm flex items-center justify-center gap-2" 
                         type="submit"
-                        isLoading={isLoading}
+                        isDisabled={isLoading}
                     >
-                        Complete Registration
+                        {isLoading ? "Registering..." : "Complete Registration"}
                     </Button>
                 </Form>
             </Card>

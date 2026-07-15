@@ -80,7 +80,7 @@ export default function HeroSection() {
                             <FiArrowRight className="ml-1 group-hover:translate-x-1 transition-transform" />
                         </Button>
                         <Button 
-                            variant="bordered"
+                            variant="outline"
                             className="border-slate-200 bg-white hover:bg-slate-50 text-slate-600 font-semibold h-11 px-6 rounded-xl text-sm transition-colors"
                             onClick={scrollToNext}
                         >

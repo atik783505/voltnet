@@ -9,7 +9,7 @@ import {
     LuZap, LuUsers, LuShieldAlert, LuLogOut,
 } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
-import type { IconType } from "react-icons/lu";
+import type { IconType } from "react-icons";
 import toast from 'react-hot-toast';
 import { MdAddTask } from 'react-icons/md';
 import { IoIosHelpCircle } from 'react-icons/io';
@@ -92,11 +92,10 @@ export function DashboardSidebar() {
             {userRole === 'admin' && (
                 <Link href="/dashboard/admin/manage-stations/new" className="block w-full">
                     <Button
-                        color="primary"
+                        variant="primary"
                         className="w-full font-bold text-sm h-11 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-600/20"
-                        startContent={<span className="text-lg">+</span>}
                     >
-                        New Station
+                        <span className="text-lg mr-1">+</span> New Station
                     </Button>
                 </Link>
             )}
@@ -130,7 +129,7 @@ export function DashboardSidebar() {
                 </div>
                 <Button
                     onClick={handleSignOut}
-                    variant="light"
+                    variant="ghost"
                     isIconOnly
                     className="text-red-400 hover:bg-red-500/10 rounded-lg min-w-8 w-8 h-8"
                 >
@@ -148,7 +147,7 @@ export function DashboardSidebar() {
                     <LuZap className="fill-blue-500 text-blue-500" size={20} />
                     <span className="text-lg font-bold text-white">VoltNet</span>
                 </Link>
-                <Button onPress={() => setIsOpen(true)} variant="light" isIconOnly className="text-slate-400"><LuMenu className="size-6" /></Button>
+                <Button onPress={() => setIsOpen(true)} variant="ghost" isIconOnly className="text-slate-400"><LuMenu className="size-6" /></Button>
                 <Drawer key={drawerKey} isOpen={isOpen} onOpenChange={setIsOpen}>
                     <Drawer.Backdrop />
                     <Drawer.Content placement="left" className="bg-slate-950 max-w-[270px] border-r border-slate-900 p-5 text-white flex flex-col h-full">

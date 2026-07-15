@@ -31,11 +31,11 @@ export default function StationCard({ station }: StationCardProps) {
                 {/* Status Chip (Top Right) */}
                 <div className="absolute top-3 right-3 z-10">
                     {station.status === 'active' ? (
-                        <Chip color="success" variant="flat" className="font-semibold text-xs shadow-sm">
+                        <Chip color="success" variant="soft" className="font-semibold text-xs shadow-sm">
                             Active
                         </Chip>
                     ) : (
-                        <Chip color="danger" variant="flat" className="font-semibold text-xs shadow-sm">
+                        <Chip color="danger" variant="soft" className="font-semibold text-xs shadow-sm">
                             Maintenance
                         </Chip>
                     )}

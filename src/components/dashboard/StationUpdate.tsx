@@ -49,9 +49,9 @@ export function StationUpdateModal({ station, onEdit }: StationUpdateModalProps)
                 <Button
                     isIconOnly
                     size="sm"
-                    variant="light"
+                    variant="ghost"
                     className="text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
-                    title="Edit Station"
+                    aria-label="Edit Station"
                 >
                     <Edit2 className="w-4 h-4" />
                 </Button>
@@ -102,7 +102,7 @@ export function StationUpdateModal({ station, onEdit }: StationUpdateModalProps)
 
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {/* Pricing */}
-                                        <TextField defaultValue={station?.pricing} name="pricing" isRequired className="w-full flex flex-col gap-1.5">
+                                        <TextField defaultValue={station?.pricing !== undefined ? String(station.pricing) : undefined} name="pricing" isRequired className="w-full flex flex-col gap-1.5">
                                             <Label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pricing (BDT / kWh)</Label>
                                             <Input type="number" className="rounded-xl border border-slate-900 bg-slate-900/50 text-slate-200 placeholder:text-slate-600 focus:border-blue-500/50 transition-all h-11" placeholder="e.g. 15" />
                                         </TextField>
@@ -125,10 +125,10 @@ export function StationUpdateModal({ station, onEdit }: StationUpdateModalProps)
                                         <Button
                                             type="submit"
                                             slot="close"
-                                            className='w-full font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-2.5 transition-all shadow-lg shadow-blue-500/10'
-                                            isLoading={isUpdating}
+                                            className='w-full font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white py-2.5 transition-all shadow-lg shadow-blue-500/10 flex items-center justify-center gap-2'
+                                            isDisabled={isUpdating}
                                         >
-                                            Update Station
+                                            {isUpdating ? "Updating..." : "Update Station"}
                                         </Button>
                                     </Modal.Footer>
                                 </form>

@@ -106,11 +106,11 @@ export default function Signin() {
 
                     {/* Standard Sign In Button */}
                     <Button
-                        className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm"
+                        className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm flex items-center justify-center gap-2"
                         type="submit"
-                        isLoading={isLoading}
+                        isDisabled={isLoading}
                     >
-                        Sign In
+                        {isLoading ? "Signing In..." : "Sign In"}
                     </Button>
 
                     {/* Visual Separator Divider */}
@@ -126,7 +126,7 @@ export default function Signin() {
                     <div className="flex gap-4 w-full">
                         <Button
                             type="button"
-                            variant="bordered"
+                            variant="outline"
                             className="w-1/2 h-11 border-slate-200 rounded-xl font-semibold text-slate-600 text-xs bg-white hover:bg-slate-50 transition-colors"
                             onClick={handleGoogleLogin}
                         >

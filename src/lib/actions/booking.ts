@@ -3,7 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { serverMutation } from "../core/server";
 
-export const createBookingAction = async (data: { stationId: string; startTime: string; duration: number; totalCost: number }) => {
+export const createBookingAction = async (data: { 
+    userEmail: string; 
+    stationId: string; 
+    duration: number; 
+    bookingDate: string; 
+    connectorType: string; 
+    totalAmount: number; 
+}) => {
     try {
         const res = await serverMutation('/api/bookings', data, 'POST');
         revalidatePath('/dashboard/bookings'); 

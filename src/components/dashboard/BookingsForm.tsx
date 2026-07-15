@@ -7,7 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, Zap, ShieldAlert, Loader2, CheckCircle2, CreditCard, ArrowLeft } from "lucide-react";
 import { createBookingAction } from "@/lib/actions/booking";
 
-export default function BookingForm({ stationId, basePricing, connectorType }) {
+interface BookingFormProps {
+    stationId: string;
+    basePricing: number | string;
+    connectorType: string;
+}
+
+export default function BookingForm({ stationId, basePricing, connectorType }: BookingFormProps) {
     const { data: session, isPending } = useSession();
     
     const [dateTime, setDateTime] = useState("");
@@ -44,7 +50,7 @@ export default function BookingForm({ stationId, basePricing, connectorType }) {
         setIsSubmitting(true);
         try {
             const result = await createBookingAction({
-                userEmail: session.user.email,
+                userEmail: session?.user?.email || "",
                 stationId,
                 duration,
                 bookingDate: dateTime,

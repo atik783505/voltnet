@@ -78,13 +78,13 @@ export default function AddStation() {
     const sectionVariants = {
         hidden: { opacity: 0, y: 15 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } }
-    };
+    } as const;
 
     const fieldVariants = {
         hidden: { opacity: 0, height: 0, scale: 0.95 },
         visible: { opacity: 1, height: 'auto', scale: 1, transition: { type: 'spring', duration: 0.3 } },
         exit: { opacity: 0, height: 0, scale: 0.95, transition: { duration: 0.2 } }
-    };
+    } as const;
 
     return (
         <motion.div 

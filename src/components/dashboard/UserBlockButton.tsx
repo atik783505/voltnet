@@ -38,16 +38,18 @@ export function UserBlockButton({ userId, isBlocked }: UserBlockButtonProps) {
   return (
     <Button
       size="sm"
-      variant="flat"
+      variant="ghost"
       onClick={handleToggle}
-      isLoading={isLoading}
+      isDisabled={isLoading}
       className={`font-semibold rounded-lg px-3 py-1.5 transition-colors flex items-center gap-1.5 ${
         isBlocked
           ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
           : "bg-rose-500/10 text-rose-400 hover:bg-rose-500/20"
       }`}
     >
-      {isBlocked ? (
+      {isLoading ? (
+        <span>Processing...</span>
+      ) : isBlocked ? (
         <>
           <ShieldCheck className="w-4 h-4" />
           Unblock

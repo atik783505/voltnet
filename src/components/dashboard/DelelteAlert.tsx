@@ -41,9 +41,9 @@ export function StationDeleteAlert({ onDelete, station }: StationDeleteAlertProp
       <Button
         isIconOnly
         size="sm"
-        variant="light"
+        variant="ghost"
         className="text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors"
-        title="Delete Station"
+        aria-label="Delete Station"
       >
         <Trash2 className="w-4 h-4" />
       </Button>
@@ -71,11 +71,11 @@ export function StationDeleteAlert({ onDelete, station }: StationDeleteAlertProp
               </Button>
               <Button 
                 slot="close" 
-                className="bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl"
+                className="bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl flex items-center gap-1.5"
                 onClick={handleActionDelete}
-                isLoading={isDeleting}
+                isDisabled={isDeleting}
               >
-                Delete Station
+                {isDeleting ? "Deleting..." : "Delete Station"}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>
