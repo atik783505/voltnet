@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Adminhome = () => {
+const Adminhome = async() => {
     return (
         <div>
             <h2>admin home</h2>

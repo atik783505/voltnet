@@ -14,3 +14,14 @@ export interface StationInput {
     status: 'active' | 'inactive';
     createdAt?: string;
 }
+
+export interface UserInput {
+  _id: string;
+  name: string;
+  email: string;
+  image?: string;
+  role: "admin" | "driver" | "user" | string;
+  isBlocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

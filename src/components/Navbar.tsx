@@ -35,11 +35,14 @@ export default function Navbar() {
         ? [
             { name: "Dashboard", href: dashboardHref },
             { name: "All Stations", href: "/stations" },
-            { name: "Reservations", href: "/reservations" },
+            { name: "About", href: "/about" },
+            { name: "Contact", href: "/contact" },
             { name: "Fleet", href: "/fleet" },
           ]
         : [
             { name: "All Stations", href: "/stations" },
+            { name: "About", href: "/about" },
+            { name: "Contact", href: "/contact" },
             { name: "Fleet", href: "/fleet" },
           ];
     if (isPending) return <div className="h-16 w-full border-b border-slate-100 bg-white" />;

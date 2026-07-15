@@ -2,19 +2,20 @@ import { getStation } from '@/lib/api/station';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-    Zap, 
-    MapPin, 
-    Star, 
-    Wifi, 
-    ShieldCheck, 
-    Coffee, 
-    Layers, 
-    TrendingUp, 
-    TrendingDown, 
-    Calendar, 
-    CheckCircle2 
+import {
+    Zap,
+    MapPin,
+    Star,
+    Wifi,
+    ShieldCheck,
+    Coffee,
+    Layers,
+    TrendingUp,
+    TrendingDown,
+    Calendar,
+    CheckCircle2
 } from 'lucide-react';
+import BookingForm from '@/components/dashboard/BookingsForm';
 
 interface PageProps {
     params: Promise<{
@@ -27,7 +28,7 @@ const StationDetails = async ({ params }: PageProps) => {
     const stationData = await getStation(id);
 
     // 🛑 BETTER AUTH ROLE CHECK (আপাতত টেস্ট করার জন্য true রাখা হলো)
-    const isDriver = true; 
+    const isDriver = true;
 
     if (!stationData || stationData.message) {
         return (
@@ -40,14 +41,14 @@ const StationDetails = async ({ params }: PageProps) => {
     }
 
     const isInactive = stationData.status === 'inactive';
-    
+
     // ইমেজের অ্যারে ডাটাবেজ থেকে নেওয়া হলো
     const imageList: string[] = stationData.images || [];
     const hasMultipleImages = imageList.length > 1;
 
     return (
         <div className="bg-[#f8fafc] min-h-screen antialiased text-slate-900 pb-12">
-            
+
             {/* ব্রেডক্রাম্ব নেভিগেশন */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
                 <nav className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
@@ -62,12 +63,12 @@ const StationDetails = async ({ params }: PageProps) => {
             {/* 📸 ১. ইমেজ গ্যালারি লেআউট (শুধুমাত্র অ্যারেতে থাকা ইমেজগুলো দেখাবে) */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                    
+
                     {/* মেইন ফার্স্ট ইমেজ (সবসময় দেখাবে যদি অন্তত ১টি ইমেজ থাকে) */}
                     <div className={`${hasMultipleImages ? 'md:col-span-8' : 'md:col-span-12'} relative h-[260px] sm:h-[350px] md:h-[480px] overflow-hidden rounded-2xl shadow-xs group bg-slate-100`}>
                         {imageList[0] ? (
-                            <Image 
-                                src={imageList[0]} 
+                            <Image
+                                src={imageList[0]}
                                 alt={stationData.name}
                                 fill
                                 priority
@@ -86,8 +87,8 @@ const StationDetails = async ({ params }: PageProps) => {
                         <div className="md:col-span-4 flex flex-col gap-3 h-[480px]">
                             {imageList.slice(1, 4).map((imgUrl: string, idx: number) => (
                                 <div key={idx} className="relative flex-1 overflow-hidden rounded-xl border border-slate-100 bg-slate-50 group">
-                                    <Image 
-                                        src={imgUrl} 
+                                    <Image
+                                        src={imgUrl}
                                         alt={`Gallery grid ${idx + 2}`}
                                         fill
                                         sizes="25vw"
@@ -103,10 +104,10 @@ const StationDetails = async ({ params }: PageProps) => {
             {/* 🏢 ২. মেইন কন্টেন্ট সেকশন (২ কলাম স্প্লিট) */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    
+
                     {/* বাম কলাম: ডিটেইলস প্যানেল */}
                     <div className="lg:col-span-8 space-y-8 bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm">
-                        
+
                         {/* শিরোনাম, স্ট্যাটাস ও রিভিউ */}
                         <div>
                             <div className="flex flex-wrap items-center gap-3">
@@ -133,7 +134,7 @@ const StationDetails = async ({ params }: PageProps) => {
                         <div className="space-y-3">
                             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Available Connectors</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                
+
                                 {/* ডায়নামিক কানেক্টর কার্ড */}
                                 <div className="border border-slate-200/80 rounded-2xl p-4 bg-white shadow-xs flex flex-col justify-between h-[135px]">
                                     <div className="flex justify-between items-start">
@@ -183,10 +184,10 @@ const StationDetails = async ({ params }: PageProps) => {
                             <div className="flex flex-wrap gap-5">
                                 {stationData.amenities && stationData.amenities.map((amenity: string, idx: number) => {
                                     // অ্যামেনিটিজ অনুযায়ী পারফেক্ট রিঅ্যাক্ট আইকন ম্যাচিং লজিক
-                                    let IconComponent = Coffee; 
-                                    if(amenity.toLowerCase().includes('wifi')) IconComponent = Wifi;
-                                    if(amenity.toLowerCase().includes('restroom') || amenity.toLowerCase().includes('hall')) IconComponent = Layers;
-                                    if(amenity.toLowerCase().includes('security') || amenity.toLowerCase().includes('gate')) IconComponent = ShieldCheck;
+                                    let IconComponent = Coffee;
+                                    if (amenity.toLowerCase().includes('wifi')) IconComponent = Wifi;
+                                    if (amenity.toLowerCase().includes('restroom') || amenity.toLowerCase().includes('hall')) IconComponent = Layers;
+                                    if (amenity.toLowerCase().includes('security') || amenity.toLowerCase().includes('gate')) IconComponent = ShieldCheck;
 
                                     return (
                                         <div key={idx} className="flex flex-col items-center gap-1.5">
@@ -226,50 +227,16 @@ const StationDetails = async ({ params }: PageProps) => {
 
                     {/* ডান কলাম: বুকিং সেশন ও ম্যাপ প্যানেল */}
                     <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-6">
-                        
+
                         {isDriver ? (
                             <div className="bg-white border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
                                 <h3 className="text-base font-extrabold text-slate-900 tracking-tight">Book a Session</h3>
-                                
-                                <form className="space-y-4 mt-4">
-                                    <div className="relative">
-                                        <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Date & Time</label>
-                                        <input 
-                                            type="datetime-local" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        />
-                                    </div>
 
-                                    <div>
-                                        <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Connector Type</label>
-                                        <select className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-600">
-                                            <option>{stationData.connectorType || "CCS 2"} (Ultra-Fast)</option>
-                                        </select>
-                                    </div>
-
-                                    {/* বিলিং ইনভয়েস */}
-                                    <div className="bg-slate-50 rounded-xl p-3.5 space-y-2 border border-slate-100 text-xs">
-                                        <div className="flex justify-between text-slate-500">
-                                            <span>Estimated Cost (@50kWh)</span>
-                                            <span className="font-semibold text-slate-700">{Number(stationData.pricing) * 50} BDT</span>
-                                        </div>
-                                        <div className="flex justify-between text-slate-500">
-                                            <span>Reservation Fee</span>
-                                            <span className="text-emerald-600 font-semibold">+50 BDT</span>
-                                        </div>
-                                        <div className="border-t border-slate-200/60 pt-2.5 flex justify-between font-black text-slate-900 text-sm">
-                                            <span>Total Estimate</span>
-                                            <span className="text-blue-600">{(Number(stationData.pricing) * 50) + 50} BDT</span>
-                                        </div>
-                                    </div>
-
-                                    <button 
-                                        type="submit"
-                                        className="w-full bg-[#2563eb] text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-all cursor-pointer text-xs shadow-xs tracking-wide flex items-center justify-center gap-2"
-                                    >
-                                        <Calendar size={14} /> Book Session
-                                    </button>
-                                </form>
+                                <BookingForm
+                                    stationId={stationData._id}
+                                    basePricing={stationData.pricing}
+                                    connectorType={stationData.connectorType}
+                                />
                                 <p className="text-[10px] text-center text-slate-400 mt-3 font-medium">You won't be charged until you start your actual session.</p>
                             </div>
                         ) : (
@@ -284,7 +251,7 @@ const StationDetails = async ({ params }: PageProps) => {
                                 <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wide">Location Map</h4>
                                 <span className="text-[10px] font-bold text-blue-600 hover:underline cursor-pointer flex items-center gap-0.5"><MapPin size={10} /> Open Maps</span>
                             </div>
-                            
+
                             <div className="relative h-36 w-full bg-slate-50 rounded-xl overflow-hidden border border-slate-100">
                                 <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:12px_12px] flex items-center justify-center">
                                     <div className="bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-bold shadow-xs text-slate-600 flex items-center gap-1">

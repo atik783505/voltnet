@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Avatar, Button, Drawer } from "@heroui/react";
 import { useSession, authClient } from "@/lib/auth-client";
-import { 
-    LuLayoutDashboard, LuMenu, LuMapPin, LuHistory, 
-    LuZap, LuUsers, LuShieldAlert, LuLogOut, 
+import {
+    LuLayoutDashboard, LuMenu, LuMapPin, LuHistory,
+    LuZap, LuUsers, LuShieldAlert, LuLogOut,
 } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import type { IconType } from "react-icons/lu";
@@ -49,13 +49,12 @@ export function DashboardSidebar() {
     const navLinkMap: Record<'driver' | 'admin', NavItem[]> = {
         driver: [
             { name: "Overview", href: "/dashboard/driver", icon: LuLayoutDashboard },
-            { name: "Find Stations", href: "/all-stations", icon: LuMapPin },
+            { name: "Find Stations", href: "/stations", icon: LuMapPin },
             { name: "Charging Sessions", href: "/dashboard/driver/my-bookings", icon: LuZap },
             { name: "Payment History", href: "/dashboard/driver/transection", icon: LuHistory },
         ],
         admin: [
             { name: "Overview", href: "/dashboard/admin", icon: LuLayoutDashboard },
-            { name: "Fleet Status", href: "/dashboard/admin/fleet-status", icon: LuZap }, // Example matches image layout
             { name: "Manage Stations", href: "/dashboard/admin/manage-stations", icon: LuShieldAlert },
             { name: "Add Station", href: "/dashboard/admin/manage-stations/new", icon: MdAddTask },
             { name: "Users & Fleets", href: "/dashboard/admin/manage-users", icon: LuUsers },
@@ -71,14 +70,13 @@ export function DashboardSidebar() {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
-                    <Link 
-                        key={item.href} 
-                        href={item.href} 
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                            isActive 
-                                ? "bg-slate-800/80 text-white font-semibold border-l-3 border-blue-500 pl-3.5" 
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                                ? "bg-slate-800/80 text-white font-semibold border-l-3 border-blue-500 pl-3.5"
                                 : "text-slate-400 hover:bg-slate-900/50 hover:text-slate-200"
-                        }`}
+                            }`}
                     >
                         <Icon className={`text-lg shrink-0 ${isActive ? "text-blue-400" : "text-slate-400"}`} />
                         <span>{item.name}</span>
@@ -93,8 +91,8 @@ export function DashboardSidebar() {
             {/* Added dynamic Action Button as shown in reference design */}
             {userRole === 'admin' && (
                 <Link href="/dashboard/admin/manage-stations/new" className="block w-full">
-                    <Button 
-                        color="primary" 
+                    <Button
+                        color="primary"
                         className="w-full font-bold text-sm h-11 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-600/20"
                         startContent={<span className="text-lg">+</span>}
                     >
@@ -105,10 +103,10 @@ export function DashboardSidebar() {
 
             {/* Support and Help links matches reference UI */}
             <div className="space-y-1">
-                <Link href="/support" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 transition-colors">
+                <Link href="/contact" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 transition-colors">
                     <BiSupport className="text-base" /> Support
                 </Link>
-                <Link href="/help" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 transition-colors">
+                <Link href="/about" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 transition-colors">
                     <IoIosHelpCircle className="text-base" /> Help
                 </Link>
             </div>
@@ -116,11 +114,15 @@ export function DashboardSidebar() {
             {/* User Info & Sign out */}
             <div className="flex items-center justify-between gap-2 px-2 pt-2 border-t border-slate-900/40">
                 <div className="flex items-center gap-3 overflow-hidden">
-                    <Avatar 
-                        className="w-9 h-9 border border-blue-500/30 bg-slate-900 text-blue-400 font-bold overflow-hidden shrink-0" 
-                        name={getFallbackText(user?.name)} 
-                        src={user?.image || undefined} 
-                    />
+                    <Avatar className="w-9 h-9 border border-blue-500/30 bg-slate-900 text-blue-400 font-bold overflow-hidden shrink-0">
+                        <Avatar.Image
+                            alt={user?.name || "User Avatar"}
+                            src={user?.image || undefined}
+                        />
+                        <Avatar.Fallback>
+                            {getFallbackText(user?.name)}
+                        </Avatar.Fallback>
+                    </Avatar>
                     <div className="overflow-hidden">
                         <h3 className="text-xs font-bold text-slate-200 truncate">{user?.name || "Atikur Rahman"}</h3>
                         <p className="text-[10px] text-slate-500 capitalize">{userRole} Fleet</p>
