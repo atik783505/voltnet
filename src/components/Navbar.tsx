@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link, Button, Avatar } from "@heroui/react";
 import { usePathname } from "next/navigation";
-import { FiLogOut,} from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 import { IoNotificationsOutline, IoSettingsOutline } from "react-icons/io5";
 import { authClient } from "@/lib/auth-client";
 
@@ -15,8 +15,11 @@ export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const pathname = usePathname();
     const { data: session, isPending } = authClient.useSession();
+    
+    // সেশন থেকে ইউজার ডাটা নেওয়া
     const user = session?.user;
     const isLoggedIn = !!user;
+
     const handleSignOut = async (): Promise<void> => {
         try {
             await authClient.signOut({
@@ -30,7 +33,12 @@ export default function Navbar() {
             console.error("Error signing out:", error);
         }
     };
-    const dashboardHref = (user as any)?.role ? `/dashboard/${(user as any).role}` : '/dashboard';
+
+    // রোল অনুযায়ী ড্যাশবোর্ড পাথ হ্যান্ডেল করা
+    const userRole = (user as any)?.role;
+    const dashboardHref = userRole ? `/dashboard/${userRole}` : '/dashboard';
+
+    // ডাইনামিক লিঙ্কস
     const links: NavLink[] = isLoggedIn 
         ? [
             { name: "Dashboard", href: dashboardHref },
@@ -45,36 +53,29 @@ export default function Navbar() {
             { name: "Contact", href: "/contact" },
             { name: "Fleet", href: "/fleet" },
           ];
+
     if (isPending) return <div className="h-16 w-full border-b border-slate-100 bg-white" />;
     
-    if (pathname.includes('/dashboard')) return null;
+    if (pathname?.includes('/dashboard')) return null;
+
+    // ইউজারের নামের প্রথম ২ অক্ষর ফালব্যাক হিসেবে দেখানোর জন্য
+    const userInitials = user?.name ? user.name.substring(0, 2).toUpperCase() : "VN";
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/90 backdrop-blur-md">
             <header className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
                 
-                {/* Left Side: Brand Logo & Search Bar */}
+                {/* Left Side: Brand Logo */}
                 <div className="flex items-center gap-6 max-w-xl">
                     <Link href="/" className="flex items-center gap-2 shrink-0">
                         <p className="font-bold text-xl text-blue-600 tracking-tight">VoltNet</p>
                     </Link>
-
-                    {/* Search Bar */}
-                    {/* <div className="hidden md:flex items-center relative w-full max-w-xs">
-                        <FiSearch className="absolute left-4 text-slate-400 text-lg" />
-                        <input 
-                            type="text" 
-                            placeholder="Search by city, station..." 
-                            className="w-full h-10 pl-11 pr-11 bg-slate-50 border border-slate-200/80 rounded-full text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all"
-                        />
-                        <BiTargetLock className="absolute right-4 text-slate-400 text-xl cursor-pointer hover:text-blue-600 transition-colors" />
-                    </div> */}
                 </div>
 
                 {/* Center: Dynamic Navigation Links */}
                 <ul className="hidden items-center gap-6 lg:gap-8 md:flex shrink-0">
                     {links.map((link: NavLink) => {
-                        const isActive = pathname === link.href || (link.name === "Explore" && pathname === "/stations");
+                        const isActive = pathname === link.href || (link.name === "All Stations" && pathname === "/stations");
                         return (
                             <li key={link.href}>
                                 <Link
@@ -92,7 +93,7 @@ export default function Navbar() {
                     })}
                 </ul>
 
-                {/* Right Side: Conditional Action Section */}
+                {/* Right Side: Action Section */}
                 <div className="items-center gap-4 flex shrink-0">
                     {isLoggedIn ? (
                         <div className="flex items-center gap-3 lg:gap-4">
@@ -104,22 +105,19 @@ export default function Navbar() {
                             </button>
 
                             <Link href="/my-profile" className="shrink-0">
-                                <Avatar size="sm" className="cursor-pointer border border-slate-200 transition-transform hover:scale-105">
-                                    <Avatar.Image 
-                                        referrerPolicy="no-referrer" 
-                                        alt={user?.name || "User"} 
-                                        src={user?.image || undefined} 
-                                    />
-                                    <Avatar.Fallback>
-                                        {user?.name ? user.name.substring(0, 2).toUpperCase() : "VN"}
-                                    </Avatar.Fallback>
-                                </Avatar>
+                                {/* HeroUI / NextUI Avatar সলিড প্রপস দিয়ে ফিক্স করা হয়েছে */}
+                                <Avatar 
+                                    size="sm" 
+                                    src={user?.image || undefined} 
+                                    name={userInitials}
+                                    showFallback
+                                    className="cursor-pointer border border-slate-200 transition-transform hover:scale-105"
+                                />
                             </Link>
 
                             {/* Sign Out Button */}
                             <Button
                                 size="sm"
-                                variant="primary"
                                 onClick={handleSignOut}
                                 className="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 h-9 text-xs rounded-lg shadow-sm transition-all"
                             >
@@ -138,6 +136,7 @@ export default function Navbar() {
                         </div>
                     )}
                     
+                    {/* Mobile Menu Button */}
                     <button
                         type="button"
                         className="md:hidden p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-50 ml-1"
@@ -171,21 +170,16 @@ export default function Navbar() {
                     {isLoggedIn ? (
                         <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
                             <div className="flex items-center gap-3">
-                                <Avatar size="sm">
-                                    <Avatar.Image 
-                                        referrerPolicy="no-referrer" 
-                                        alt={user?.name || "User"} 
-                                        src={user?.image || undefined} 
-                                    />
-                                    <Avatar.Fallback>
-                                        {user?.name ? user.name.substring(0, 2).toUpperCase() : "VN"}
-                                    </Avatar.Fallback>
-                                </Avatar>
+                                <Avatar 
+                                    size="sm" 
+                                    src={user?.image || undefined} 
+                                    name={userInitials}
+                                    showFallback
+                                />
                                 <div className="text-sm font-medium text-slate-700">{user?.name}</div>
                             </div>
                             <Button
                                 size="sm"
-                                variant="primary"
                                 onClick={handleSignOut}
                                 className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold h-10 rounded-lg transition-colors"
                             >
