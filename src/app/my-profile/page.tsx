@@ -230,10 +230,19 @@ export default function MyProfilePage() {
                         {/* Save Button */}
                         <Button
                             type="submit"
-                            isLoading={isUpdating}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-11 rounded-xl shadow-lg shadow-blue-600/10 transition-all flex items-center justify-center gap-2"
+                            disabled={isUpdating}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-11 rounded-xl shadow-lg shadow-blue-600/10 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            {!isUpdating && <Save size={16} />} Save Changes
+                            {isUpdating ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    Saving...
+                                </>
+                            ) : (
+                                <>
+                                    <Save size={16} /> Save Changes
+                                </>
+                            )}
                         </Button>
                     </form>
                 </div>
