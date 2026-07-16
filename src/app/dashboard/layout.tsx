@@ -3,7 +3,7 @@ import React from 'react';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="flex flex-col md:flex-row h-screen max-h-screen w-full bg-slate-50 text-slate-800 overflow-hidden relative">
+        <div className="flex flex-col md:flex-row h-screen max-h-screen w-full bg-slate-50 text-slate-800 overflow-hidden overscroll-y-none relative">
             <div 
                 className="absolute inset-0 pointer-events-none opacity-[0.4] mix-blend-multiply"
                 style={{
@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="relative z-20 flex-shrink-0">
                 <DashboardSidebar />
             </div>
-            <main className="flex-1 h-full max-h-full overflow-y-auto relative z-10 px-4 py-6 md:px-8 md:py-8">
+            <main className="flex-1 md:h-full md:max-h-full min-h-0 overflow-y-auto relative z-10 px-4 py-6 md:px-8 md:py-8">
                 <div className="max-w-7xl mx-auto w-full pb-12"> 
                     {children}
                 </div>

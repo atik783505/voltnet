@@ -55,8 +55,6 @@ export default function Navbar() {
             { name: "Fleet", href: "/fleet" },
         ];
 
-    if (isPending) return <div className="h-16 w-full border-b border-slate-100 bg-white" />;
-
     if (pathname?.includes('/dashboard')) return null;
 
     return (
@@ -92,7 +90,12 @@ export default function Navbar() {
 
                 {/* Right Side: Action Section */}
                 <div className="items-center gap-4 flex shrink-0">
-                    {isLoggedIn ? (
+                    {isPending ? (
+                        <div className="hidden sm:flex items-center gap-4">
+                            <div className="w-12 h-5 bg-slate-100 rounded-md animate-pulse" />
+                            <div className="w-24 h-9 bg-slate-100 rounded-lg animate-pulse" />
+                        </div>
+                    ) : isLoggedIn ? (
                         <div className="flex items-center gap-3 lg:gap-4">
                             <button type="button" className="p-2 text-slate-400 hover:text-slate-700 rounded-full transition-colors">
                                 <IoNotificationsOutline size={22} />
@@ -166,7 +169,11 @@ export default function Navbar() {
                         </Link>
                     ))}
 
-                    {isLoggedIn ? (
+                    {isPending ? (
+                        <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
+                            <div className="h-10 w-full bg-slate-100 rounded-lg animate-pulse" />
+                        </div>
+                    ) : isLoggedIn ? (
                         <div className="border-t border-slate-100 pt-4 flex flex-col gap-3">
                             <div className="flex items-center gap-3">
                                 <Avatar className="w-9 h-9 border border-blue-500/30 bg-slate-900 text-blue-400 font-bold overflow-hidden shrink-0">
