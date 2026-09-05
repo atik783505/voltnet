@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 export default function StationFilters() {
@@ -10,24 +10,28 @@ export default function StationFilters() {
   const { replace } = useRouter();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [location, setLocation] = useState(searchParams.get("location") || "");
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    if (!isMounted.current) return;
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
-      params.set("page", "1"); 
+      params.set("page", "1");
 
       if (search) {
         params.set("search", search);
       } else {
         params.delete("search");
       }
-      
+
       replace(`${pathname}?${params.toString()}`);
     }, 400);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [search, pathname, replace]);
+  }, [search, pathname, replace, searchParams]);
 
   useEffect(() => {
+    if (!isMounted.current) return;
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", "1");
@@ -42,7 +46,11 @@ export default function StationFilters() {
     }, 400);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [location, pathname, replace]);
+  }, [location, pathname, replace, searchParams]);
+
+  useEffect(() => {
+    isMounted.current = true;
+  }, []);
   const handleDropdownChange = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", "1");

@@ -230,7 +230,7 @@ export default function MyProfilePage() {
                         {/* Save Button */}
                         <Button
                             type="submit"
-                            disabled={isUpdating}
+                            isDisabled={isUpdating}
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold h-11 rounded-xl shadow-lg shadow-blue-600/10 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                             {isUpdating ? (

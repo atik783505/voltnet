@@ -10,25 +10,33 @@ export const auth = betterAuth({
     // Optional: if you don't provide a client, database transactions won't be enabled.
     client
   }),
-  emailAndPassword: { 
-    enabled: true, 
-  }, 
+  emailAndPassword: {
+    enabled: true,
+  },
   user: {
-    additionalFields:{
-      role : {
+    additionalFields: {
+      role: {
         type: 'string',
         defaultValue: 'driver',
+      },
+      companyName: {
+        type: "string",
+        required: false,
+      },
+      registrationNo: {
+        type: "string",
+        required: false,
       },
       isBlocked: {
         type: 'boolean',
         defaultValue: false,
       }
     }
-  }, 
-   socialProviders: {
+  },
+  socialProviders: {
     google: {
-        clientId: process.env.GOOGLE_CLIENT_ID as string,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-}
+  }
 });

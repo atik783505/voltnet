@@ -7,11 +7,11 @@ import { useSession, authClient } from "@/lib/auth-client";
 import {
     LuLayoutDashboard, LuMenu, LuMapPin, LuHistory,
     LuZap, LuUsers, LuShieldAlert, LuLogOut,
+    LuBuilding,
 } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import type { IconType } from "react-icons";
 import toast from 'react-hot-toast';
-import { MdAddTask } from 'react-icons/md';
 import { IoIosHelpCircle } from 'react-icons/io';
 
 interface NavItem {
@@ -19,6 +19,9 @@ interface NavItem {
     href: string;
     icon: IconType;
 }
+
+// ১. UserRole টাইপ ডিফাইন করা হলো
+type UserRole = 'driver' | 'admin' | 'company';
 
 export function DashboardSidebar() {
     const pathname = usePathname();
@@ -46,22 +49,29 @@ export function DashboardSidebar() {
         return name.slice(0, 2).toUpperCase();
     };
 
-    const navLinkMap: Record<'driver' | 'admin', NavItem[]> = {
+    // ২. Record এ 'company' রোল যুক্ত করা হয়েছে
+    const navLinkMap: Record<UserRole, NavItem[]> = {
         driver: [
             { name: "Overview", href: "/dashboard/driver", icon: LuLayoutDashboard },
             { name: "Find Stations", href: "/stations", icon: LuMapPin },
             { name: "Charging Sessions", href: "/dashboard/driver/my-bookings", icon: LuZap },
             { name: "Payment History", href: "/dashboard/driver/transection", icon: LuHistory },
         ],
+        company: [
+            { name: "Overview", href: "/dashboard/company", icon: LuLayoutDashboard },
+            { name: "Fleet Management", href: "/dashboard/company/fleets", icon: LuBuilding },
+            { name: "Charging Sessions", href: "/dashboard/company/bookings", icon: LuZap },
+            { name: "Transactions", href: "/dashboard/company/transactions", icon: LuHistory },
+        ],
         admin: [
             { name: "Overview", href: "/dashboard/admin", icon: LuLayoutDashboard },
             { name: "Manage Stations", href: "/dashboard/admin/manage-stations", icon: LuShieldAlert },
-            { name: "Add Station", href: "/dashboard/admin/manage-stations/new", icon: MdAddTask },
             { name: "Users & Fleets", href: "/dashboard/admin/manage-users", icon: LuUsers },
         ]
     };
 
-    const userRole = (user as any)?.role === 'admin' ? 'admin' : 'driver';
+    const rawRole = (user as any)?.role as string;
+    const userRole: UserRole = (rawRole === 'admin' || rawRole === 'company') ? rawRole : 'driver';
     const menuItems = navLinkMap[userRole];
 
     const renderNavLinks = () => (
@@ -88,19 +98,7 @@ export function DashboardSidebar() {
 
     const renderBottomSection = () => (
         <div className="mt-auto pt-6 border-t border-slate-900/80 space-y-4">
-            {/* Added dynamic Action Button as shown in reference design */}
-            {userRole === 'admin' && (
-                <Link href="/dashboard/admin/manage-stations/new" className="block w-full">
-                    <Button
-                        variant="primary"
-                        className="w-full font-bold text-sm h-11 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-600/20"
-                    >
-                        <span className="text-lg mr-1">+</span> New Station
-                    </Button>
-                </Link>
-            )}
-
-            {/* Support and Help links matches reference UI */}
+            {/* Support and Help links */}
             <div className="space-y-1">
                 <Link href="/contact" className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-900/50 hover:text-slate-200 transition-colors">
                     <BiSupport className="text-base" /> Support
@@ -123,7 +121,7 @@ export function DashboardSidebar() {
                         </Avatar.Fallback>
                     </Avatar>
                     <div className="overflow-hidden">
-                        <h3 className="text-xs font-bold text-slate-200 truncate">{user?.name || "Atikur Rahman"}</h3>
+                        <h3 className="text-xs font-bold text-slate-200 truncate">{user?.name || "User"}</h3>
                         <p className="text-[10px] text-slate-500 capitalize">{userRole} Fleet</p>
                     </div>
                 </div>
@@ -141,7 +139,7 @@ export function DashboardSidebar() {
 
     return (
         <>
-            {/* Mobile Header (Remains sticky on mobile screens) */}
+            {/* Mobile Header */}
             <div className="md:hidden fixed top-0 left-0 w-full h-14 bg-slate-950 border-b border-slate-900 px-4 flex items-center justify-between z-40">
                 <Link href='/' className="flex items-center gap-2">
                     <LuZap className="fill-blue-500 text-blue-500" size={20} />
@@ -162,7 +160,7 @@ export function DashboardSidebar() {
                 </Drawer>
             </div>
 
-            {/* Desktop Aside (Styled after references with dark-slate gradient glass effects) */}
+            {/* Desktop Aside */}
             <aside className="hidden md:flex w-64 bg-slate-950/95 border-r border-slate-900/60 flex-col h-screen sticky top-0 px-4 py-6 shrink-0 z-20 backdrop-blur-md">
                 {/* Header/Logo */}
                 <div className="mb-8 px-3">
@@ -171,8 +169,8 @@ export function DashboardSidebar() {
                             <LuZap className="fill-blue-500 text-blue-500" size={20} />
                         </div>
                         <div>
-                            <span className="text-md font-bold text-white tracking-tight block">VoltNet Admin</span>
-                            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold block -mt-1">Enterprise Fleet</span>
+                            <span className="text-md font-bold text-white tracking-tight block">VoltNet</span>
+                            <span className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold block -mt-1">{userRole} Portal</span>
                         </div>
                     </Link>
                 </div>

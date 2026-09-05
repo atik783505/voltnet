@@ -1,8 +1,18 @@
 'use client';
 import React, { useState } from "react";
-// ─── NEXT IMAGE IMPORT ───
 import Image from "next/image"; 
-import { Button, Card, Form, Input, TextField, FieldError } from "@heroui/react";
+import { 
+    Button, 
+    Card, 
+    Form, 
+    Input, 
+    TextField, 
+    FieldError, 
+    Description, 
+    Label, 
+    Radio, 
+    RadioGroup 
+} from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
@@ -10,16 +20,15 @@ import { FiZap, FiCamera } from "react-icons/fi";
 
 export default function Signup() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    // শুরুতে ডিফল্ট ছবি বা placeholder
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [role, setRole] = useState<string>("driver");
 
-    // ইমেজ সিলেক্ট করলে প্রিভিউ দেখানোর ফাংশন (সাধারণFileReader ডাটা URI)
+    // ইমেজ সিলেক্ট করলে প্রিভিউ দেখানোর ফাংশন
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                // FileReader ডিফল্ট Base64 ডাটা URI দেয়
                 setImagePreview(reader.result as string);
             };
             reader.readAsDataURL(file);
@@ -36,6 +45,10 @@ export default function Signup() {
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
         const imageFile = formData.get("image") as File;
+        
+        // Company specific fields
+        const companyName = formData.get("companyName") as string || "";
+        const registrationNo = formData.get("registrationNo") as string || "";
 
         if (password !== confirmPassword) {
             toast.error("Passwords do not match!");
@@ -81,9 +94,15 @@ export default function Signup() {
                 email,
                 password,
                 name,
-                image: imageUrl || undefined, // ImgBB URL
+                image: imageUrl || undefined,
+                role: role, // Selected role ('driver' or 'company')
+                // additional fields if required by your auth schema
+                ...(role === 'company' && {
+                    companyName,
+                    registrationNo,
+                }),
                 callbackURL: "/"
-            });
+            } as any);
 
             if (data) {
                 toast.success('Account created successfully!');
@@ -132,26 +151,25 @@ export default function Signup() {
             </div>
 
             {/* CONTENT CARD */}
-            <Card className="relative z-10 p-6 md:p-8 bg-white/95 backdrop-blur-lg border border-slate-200/80 shadow-2xl shadow-slate-900/10 rounded-2xl w-full max-w-[480px] my-auto">
+            <Card className="relative z-10 p-6 md:p-8 bg-white/95 backdrop-blur-lg border border-slate-200/80 shadow-2xl shadow-slate-900/10 rounded-2xl w-full max-w-[500px] my-auto">
                 <div className="mb-5">
                     <h2 className="text-xl font-bold text-slate-900 tracking-tight">Create an Account</h2>
-                    <p className="text-xs text-slate-400 mt-1">Get started with managing your charging fleet today.</p>
+                    <p className="text-xs text-slate-400 mt-1">Get started with managing your charging fleet or driving EV today.</p>
                 </div>
 
                 <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
                     
-                    {/* ─── NEXT IMAGE UPLOAD (FIRST FIELD) ─── */}
+                    {/* ─── NEXT IMAGE UPLOAD ─── */}
                     <div className="flex flex-col items-center justify-center mb-2">
-                        {/* Parent must be position relative for 'fill' */}
                         <label className="relative group cursor-pointer w-24 h-24 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden flex flex-col items-center justify-center hover:border-blue-500 hover:bg-slate-100/50 transition-all shadow-sm">
                             
                             {imagePreview ? (
                                 <Image 
-                                    src={imagePreview} // Base64 data URI
+                                    src={imagePreview}
                                     alt="Profile Preview" 
-                                    fill // Container এর পূর্ণ মাপ নেবে
+                                    fill
                                     className="object-cover rounded-2xl"
-                                    unoptimized // Base64 ছবিকে অপ্টিমাইজ করার দরকার নেই
+                                    unoptimized
                                 />
                             ) : (
                                 <div className="flex flex-col items-center text-center p-2 z-10">
@@ -160,7 +178,6 @@ export default function Signup() {
                                 </div>
                             )}
                             
-                            {/* Hidden File Input */}
                             <input 
                                 type="file" 
                                 name="image"
@@ -169,7 +186,6 @@ export default function Signup() {
                                 onChange={handleImageChange}
                             />
 
-                            {/* Overlay on Hover (always visible when image is there) */}
                             {imagePreview && (
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-2xl z-20">
                                     <FiCamera size={18} className="text-white" />
@@ -179,6 +195,38 @@ export default function Signup() {
                         <span className="text-[11px] font-medium text-slate-400 mt-1.5">Profile Photo</span>
                     </div>
 
+                    {/* ─── ACCOUNT TYPE / ROLE SELECTION ─── */}
+                    <div className="flex flex-col gap-2 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80">
+                        <Label className="text-xs font-semibold text-slate-700">Account Type</Label>
+                        <RadioGroup 
+                            value={role} 
+                            onChange={(val: any) => setRole(typeof val === 'string' ? val : val.target.value)} 
+                            name="role" 
+                            orientation="horizontal"
+                            className="flex gap-3"
+                        >
+                            <Radio value="driver" className="flex-1 cursor-pointer">
+                                <Radio.Content>
+                                    <Radio.Control>
+                                        <Radio.Indicator />
+                                    </Radio.Control>
+                                    <span className="text-xs font-bold text-slate-800">EV Driver</span>
+                                </Radio.Content>
+                                <Description className="text-[10px] text-slate-400">Personal EV User</Description>
+                            </Radio>
+
+                            <Radio value="company" className="flex-1 cursor-pointer">
+                                <Radio.Content>
+                                    <Radio.Control>
+                                        <Radio.Indicator />
+                                    </Radio.Control>
+                                    <span className="text-xs font-bold text-slate-800">Fleet Company</span>
+                                </Radio.Content>
+                                <Description className="text-[10px] text-slate-400">Enterprise / Operator</Description>
+                            </Radio>
+                        </RadioGroup>
+                    </div>
+
                     {/* Full Name Field */}
                     <TextField isRequired name="name" type="text">
                         <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Full Name</span>
@@ -186,10 +234,27 @@ export default function Signup() {
                         <FieldError className="text-xs text-rose-500 mt-1" />
                     </TextField>
 
+                    {/* DYNAMIC COMPANY FIELDS */}
+                    {role === "company" && (
+                        <div className="flex flex-col gap-3 p-3 bg-blue-50/50 border border-blue-100 rounded-xl">
+                            <TextField isRequired name="companyName" type="text">
+                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Company / Fleet Name</span>
+                                <Input placeholder="EcoCharge Fleet Ltd." className="bg-white border border-slate-200 rounded-xl text-sm" />
+                                <FieldError className="text-xs text-rose-500 mt-1" />
+                            </TextField>
+
+                            <TextField isRequired name="registrationNo" type="text">
+                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Business Registration No.</span>
+                                <Input placeholder="REG-892341" className="bg-white border border-slate-200 rounded-xl text-sm" />
+                                <FieldError className="text-xs text-rose-500 mt-1" />
+                            </TextField>
+                        </div>
+                    )}
+
                     {/* Email Field */}
                     <TextField isRequired name="email" type="email">
                         <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Email Address</span>
-                        <Input placeholder="admin@voltnet.com" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
+                        <Input placeholder="user@domain.com" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
                         <FieldError className="text-xs text-rose-500 mt-1" />
                     </TextField>
 
@@ -217,7 +282,7 @@ export default function Signup() {
                     </Button>
 
                     {/* Visual Separator Divider */}
-                    <div className="flex items-center my-2 w-full">
+                    <div className="flex items-center my-1 w-full">
                         <hr className="flex-1 border-slate-200" />
                         <span className="px-3 text-[10px] font-bold uppercase text-slate-400 tracking-wider shrink-0">
                             Or Sign Up With
@@ -236,7 +301,7 @@ export default function Signup() {
                             <FcGoogle size={20} className="mr-2" /> Google
                         </Button>
 
-                        <p className="text-center text-xs text-slate-500 mt-2">
+                        <p className="text-center text-xs text-slate-500 mt-1">
                             Already have an account?{" "}
                             <a href="/signin" className="text-blue-600 font-semibold hover:underline">
                                 Sign In
