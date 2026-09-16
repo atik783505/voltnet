@@ -34,7 +34,6 @@ const ManageUser = async () => {
                 </div>
             </div>
 
-            {/* Table Container - Clean White Card */}
             <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                 <div className="w-full overflow-x-auto">
                     <table className="w-full text-left border-collapse min-w-[750px]">
