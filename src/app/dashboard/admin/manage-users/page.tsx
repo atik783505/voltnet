@@ -95,7 +95,7 @@ const ManageUser = async () => {
                                             </span>
                                         </td>
 
-                                        {/* Block Status - Light Badges */}
+                                       
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                                                 user.isBlocked 
