@@ -74,7 +74,6 @@ const ManageUser = async () => {
                                             </div>
                                         </td>
 
-                                        {/* Email */}
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-1.5 text-slate-500">
                                                 <Mail size={14} className="text-slate-400 shrink-0" />
