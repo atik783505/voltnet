@@ -31,7 +31,7 @@ export default function AboutPage() {
                     </p>
                 </div>
 
-                {/* Vision */}
+                {/* Vision of voltnet */}
                 <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
                     <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 border border-blue-100">
                         <Eye className="w-6 h-6" />
