@@ -51,7 +51,6 @@ const ManageUser = async () => {
                                 users.map((user: UserInput) => (
                                     <tr key={user._id} className="hover:bg-slate-50/50 transition">
                                         
-                                        {/* HeroUI Avatar & Name */}
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="w-10 h-10 border border-slate-200 shrink-0">
