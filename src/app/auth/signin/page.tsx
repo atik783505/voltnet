@@ -59,7 +59,7 @@ export default function Signin() {
         <div className="relative min-h-screen w-full bg-[#f4f7fa] flex flex-col items-center justify-between p-6 overflow-hidden">
 
             {/* ─── BACKGROUND GLOW EFFECTS ─── */}
-            {/* Top Right Heavy Blue Glow */}
+        
             <div className="absolute top-[-25%] right-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-600 via-indigo-500/40 to-transparent blur-[90px] pointer-events-none" />
 
             {/* Bottom Left Heavy Orange/Amber Glow */}
