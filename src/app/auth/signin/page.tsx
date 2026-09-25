@@ -59,7 +59,7 @@ export default function Signin() {
         <div className="relative min-h-screen w-full bg-[#f4f7fa] flex flex-col items-center justify-between p-6 overflow-hidden">
 
             {/* ─── BACKGROUND GLOW EFFECTS ─── */}
-        
+            {/* Top Right Heavy Blue Glow */}
             <div className="absolute top-[-25%] right-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-600 via-indigo-500/40 to-transparent blur-[90px] pointer-events-none" />
 
             {/* Bottom Left Heavy Orange/Amber Glow */}
@@ -68,7 +68,7 @@ export default function Signin() {
             {/* Grid Dot Pattern */}
             <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
 
-            {/* ─── TOP BRAND LOGO & HEADER ─── */}
+            
             <div className="relative z-10 flex flex-col items-center text-center mt-4 mb-2">
                 <div className="flex items-center gap-2 text-blue-600">
                     <FiZap size={28} className="fill-blue-600" />
