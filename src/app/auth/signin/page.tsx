@@ -65,7 +65,6 @@ export default function Signin() {
             {/* Bottom Left Heavy Orange/Amber Glow */}
             <div className="absolute bottom-[-20%] left-[-15%] w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-orange-600 via-amber-500/35 to-transparent blur-[100px] pointer-events-none" />
 
-            {/* Grid Dot Pattern */}
             <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
 
             
