@@ -85,7 +85,7 @@ export default function ContactSection() {
                         </div>
                     </div>
 
-                    {/* Right Column: Contact Form */}
+                    
                     <div className="lg:col-span-7 bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
                         <h3 className="text-xl font-bold text-slate-900 mb-2">Send a Message</h3>
                         <p className="text-xs text-slate-500 mb-6">
