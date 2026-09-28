@@ -16,6 +16,9 @@ import {
     CheckCircle2
 } from 'lucide-react';
 import BookingForm from '@/components/dashboard/BookingsForm';
+import { useSession } from '@/lib/auth-client';
+import { getSession } from 'better-auth/api';
+
 
 interface PageProps {
     params: Promise<{
@@ -27,8 +30,7 @@ const StationDetails = async ({ params }: PageProps) => {
     const { id } = await params;
     const stationData = await getStation(id);
 
-    // 🛑 BETTER AUTH ROLE CHECK (আপাতত টেস্ট করার জন্য true রাখা হলো)
-    const isDriver = true;
+    const isDriver = session?.user?.isDriver || false;
 
     if (!stationData || stationData.message) {
         return (
@@ -42,7 +44,6 @@ const StationDetails = async ({ params }: PageProps) => {
 
     const isInactive = stationData.status === 'inactive';
 
-    // ইমেজের অ্যারে ডাটাবেজ থেকে নেওয়া হলো
     const imageList: string[] = stationData.images || [];
     const hasMultipleImages = imageList.length > 1;
 
