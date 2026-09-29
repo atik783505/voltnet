@@ -1,11 +1,12 @@
 'use client';
 import React, { useState } from "react";
-import { Button, Card, Form, Input, TextField, FieldError } from "@heroui/react";
+import { Button, Form, Input, TextField, FieldError } from "@heroui/react";
 import { authClient, signIn } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { FiZap } from "react-icons/fi";
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import Link from "next/link";
 
 export default function Signin() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,7 +27,7 @@ export default function Signin() {
 
             if (data) {
                 toast.success('Welcome Back!');
-                const userRole = (data.user as any).role || 'user';
+                const userRole = (data.user as any).role || 'driver';
                 window.location.assign(`/dashboard/${userRole}`);
             }
             if (error) {
@@ -56,103 +57,120 @@ export default function Signin() {
     };
 
     return (
-        <div className="relative min-h-screen w-full bg-[#f4f7fa] flex flex-col items-center justify-between p-6 overflow-hidden">
-
-            {/* ─── BACKGROUND GLOW EFFECTS ─── */}
-            {/* Top Right Heavy Blue Glow */}
-            <div className="absolute top-[-25%] right-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-600 via-indigo-500/40 to-transparent blur-[90px] pointer-events-none" />
-
-            {/* Bottom Left Heavy Orange/Amber Glow */}
-            <div className="absolute bottom-[-20%] left-[-15%] w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-orange-600 via-amber-500/35 to-transparent blur-[100px] pointer-events-none" />
-
-            <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
-
-            
-            <div className="relative z-10 flex flex-col items-center text-center mt-4 mb-2">
-                <div className="flex items-center gap-2 text-blue-600">
-                    <FiZap size={28} className="fill-blue-600" />
-                    <span className="text-2xl font-bold text-slate-900 tracking-tight">VoltNet</span>
-                </div>
-                <p className="text-xs font-medium text-slate-500 max-w-xs mt-2 leading-relaxed">
-                    The next generation of enterprise EV fleet management and charging infrastructure.
-                </p>
-            </div>
-
-            {/* ─── CONTENT CARD ─── */}
-            <Card className="relative z-10 p-6 md:p-8 bg-white/95 backdrop-blur-lg border border-slate-200/80 shadow-2xl shadow-slate-900/10 rounded-2xl w-full max-w-[480px] my-auto">
-                <div className="mb-6">
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Welcome Back</h2>
-                    <p className="text-xs text-slate-400 mt-1">Sign in to manage your charging fleet.</p>
-                </div>
-
-                <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
-                    {/* Email Field */}
-                    <TextField isRequired name="email" type="email">
-                        <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Email Address</span>
-                        <Input placeholder="admin@voltnet.com" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
-
-                    {/* Password Field */}
-                    <TextField isRequired name="password" type="password">
-                        <div className="flex justify-between items-center mb-1.5">
-                            <span className="text-xs font-semibold text-slate-700">Password</span>
-                            <span className="text-[10px] text-blue-600 font-semibold hover:underline cursor-pointer">Forgot password?</span>
+        <div className="min-h-screen w-full bg-[#f8fafc] flex items-center justify-center p-4 sm:p-6 md:p-10">
+            {/* Main Container */}
+            <div className="w-full max-w-[960px] min-h-[580px] bg-white rounded-3xl shadow-2xl shadow-slate-200/80 overflow-hidden grid grid-cols-1 md:grid-cols-12 border border-slate-100">
+                
+                {/* ─── LEFT SIDE: DARK BRANDING PANEL ─── */}
+                <div className="md:col-span-5 bg-[#0f172a] p-8 sm:p-12 flex flex-col justify-between text-white relative overflow-hidden">
+                    {/* Background Subtle Pattern */}
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-600/20 rounded-full blur-2xl pointer-events-none" />
+                    
+                    {/* Brand Logo */}
+                    <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="p-2 bg-blue-600/20 border border-blue-500/30 rounded-xl">
+                            <FiZap size={22} className="text-blue-500 fill-blue-500" />
                         </div>
-                        <Input placeholder="••••••••" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
-
-                    {/* Standard Sign In Button */}
-                    <Button
-                        className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm flex items-center justify-center gap-2"
-                        type="submit"
-                        isDisabled={isLoading}
-                    >
-                        {isLoading ? "Signing In..." : "Sign In"}
-                    </Button>
-
-                    {/* Visual Separator Divider */}
-                    <div className="flex items-center my-2 w-full">
-                        <hr className="flex-1 border-slate-200" />
-                        <span className="px-3 text-[10px] font-bold uppercase text-slate-400 tracking-wider shrink-0">
-                            Or Continue With
-                        </span>
-                        <hr className="flex-1 border-slate-200" />
+                        <span className="text-xl font-bold tracking-tight text-white">VoltNet</span>
                     </div>
 
-                    {/* Social Google & Demo Action Elements */}
-                    <div className="flex gap-4 w-full">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="w-1/2 h-11 border-slate-200 rounded-xl font-semibold text-slate-600 text-xs bg-white hover:bg-slate-50 transition-colors"
-                            onClick={handleGoogleLogin}
-                        >
-                            <FcGoogle size={18} className="mr-1" /> Google
-                        </Button>
-
-                        <Button
-                            type="button"
-                            className="w-1/2 h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-xl shadow-sm transition-colors"
-                            onClick={handleDemoLogin}
-                        >
-                            <HiOutlineLightningBolt size={16} className="mr-0.5" /> Demo Login
-                        </Button>
+                    {/* Brand Text Content */}
+                    <div className="relative z-10 my-8">
+                        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+                            Power your journey with seamless EV charging.
+                        </h2>
+                        <p className="mt-4 text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">
+                            Access the smartest charging network. Reserve slots in advance, locate nearby hubs, and power up without waiting.
+                        </p>
                     </div>
-                </Form>
-            </Card>
 
-            {/* ─── FOOTER SECTION ─── */}
-            <div className="relative z-10 flex flex-col items-center gap-1.5 mt-6 mb-2 select-none">
-                <div className="flex items-center gap-4 text-[11px] font-medium text-slate-400">
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Documentation</span>
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Security</span>
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Support</span>
+                    {/* Left Footer Info */}
+                    <div className="relative z-10 text-[11px] text-slate-500 font-medium">
+                        © 2026 VoltNet Inc. All rights reserved.
+                    </div>
                 </div>
-                <p className="text-[10px] text-slate-400/80">
-                    © 2026 VoltNet Infrastructure Inc. All rights reserved.
-                </p>
+
+                {/* ─── RIGHT SIDE: FORM PANEL ─── */}
+                <div className="md:col-span-7 p-8 sm:p-12 flex flex-col justify-center bg-white">
+                    
+                    {/* Header Tabs (Login / Register style) */}
+                    <div className="flex items-center gap-6 mb-8 border-b border-slate-100 pb-3">
+                        <button className="text-sm font-bold text-blue-600 border-b-2 border-blue-600 -mb-3 pb-3">
+                            Login
+                        </button>
+                        <Link href="/auth/signup" className="text-sm font-semibold text-slate-400 hover:text-slate-600 transition-colors">
+                            Register
+                        </Link>
+                    </div>
+
+                    <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
+                        {/* Email Field */}
+                        <TextField isRequired name="email" type="email">
+                            <span className="text-xs font-semibold text-slate-700 mb-1.5 block">E-mail Address</span>
+                            <Input 
+                                placeholder="driver@voltnet.com" 
+                                className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                            />
+                            <FieldError className="text-xs text-rose-500 mt-1" />
+                        </TextField>
+
+                        {/* Password Field */}
+                        <TextField isRequired name="password" type="password">
+                            <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-xs font-semibold text-slate-700">Password</span>
+                                <span className="text-[11px] text-blue-600 font-medium hover:underline cursor-pointer">
+                                    Forgot password?
+                                </span>
+                            </div>
+                            <Input 
+                                placeholder="••••••••" 
+                                className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                            />
+                            <FieldError className="text-xs text-rose-500 mt-1" />
+                        </TextField>
+
+                        {/* Submit Button */}
+                        <div className="flex items-center gap-3 mt-2">
+                            <Button
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 px-6 rounded-xl shadow-md shadow-blue-600/20 transition-all text-sm"
+                                type="submit"
+                                isDisabled={isLoading}
+                            >
+                                {isLoading ? "Logging in..." : "Login"}
+                            </Button>
+
+                            <Button
+                                type="button"
+                                className="h-11 px-4 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-semibold text-xs rounded-xl transition-colors flex items-center gap-1.5"
+                                onClick={handleDemoLogin}
+                            >
+                                Demo Driver
+                            </Button>
+                        </div>
+
+                        {/* Social Login Separator */}
+                        <div className="relative flex py-3 items-center mt-4">
+                            <div className="flex-grow border-t border-slate-100"></div>
+                            <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                Or login with
+                            </span>
+                            <div className="flex-grow border-t border-slate-100"></div>
+                        </div>
+
+                        {/* Social Media Buttons */}
+                        <div className="flex items-center justify-start gap-3">
+                            <button
+                                type="button"
+                                onClick={handleGoogleLogin}
+                                className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-xs"
+                                title="Login with Google"
+                            >
+                                <FcGoogle size={20} />
+                            </button>
+                        </div>
+                    </Form>
+                </div>
+
             </div>
         </div>
     );

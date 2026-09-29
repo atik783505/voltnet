@@ -18,6 +18,8 @@ import {
 import BookingForm from '@/components/dashboard/BookingsForm';
 import { useSession } from '@/lib/auth-client';
 import { getSession } from 'better-auth/api';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 
 interface PageProps {
@@ -29,8 +31,10 @@ interface PageProps {
 const StationDetails = async ({ params }: PageProps) => {
     const { id } = await params;
     const stationData = await getStation(id);
-
-    const isDriver = session?.user?.isDriver || false;
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+    const isDriver = (session?.user as { role?: string })?.role === 'driver';
 
     if (!stationData || stationData.message) {
         return (

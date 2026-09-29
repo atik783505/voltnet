@@ -1,17 +1,17 @@
 'use client';
+
 import React, { useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
+import Link from "next/link";
 import { 
     Button, 
-    Card, 
     Form, 
     Input, 
-    TextField, 
-    FieldError, 
-    Description, 
-    Label, 
     Radio, 
-    RadioGroup 
+    RadioGroup,
+    Label,
+    TextField,
+    FieldError 
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
@@ -23,7 +23,6 @@ export default function Signup() {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [role, setRole] = useState<string>("driver");
 
-    // ইমেজ সিলেক্ট করলে প্রিভিউ দেখানোর ফাংশন
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -46,9 +45,8 @@ export default function Signup() {
         const confirmPassword = formData.get("confirmPassword") as string;
         const imageFile = formData.get("image") as File;
         
-        // Company specific fields
-        const companyName = formData.get("companyName") as string || "";
-        const registrationNo = formData.get("registrationNo") as string || "";
+        const companyName = (formData.get("companyName") as string) || "";
+        const registrationNo = (formData.get("registrationNo") as string) || "";
 
         if (password !== confirmPassword) {
             toast.error("Passwords do not match!");
@@ -58,7 +56,6 @@ export default function Signup() {
 
         let imageUrl = "";
 
-        // ─── IMGBB IMAGE UPLOAD LOGIC ───
         if (imageFile && imageFile.size > 0) {
             try {
                 const imgbbFormData = new FormData();
@@ -88,15 +85,13 @@ export default function Signup() {
             }
         }
 
-        // ─── BETTER AUTH SIGN UP ───
         try {
             const { data, error } = await authClient.signUp.email({
                 email,
                 password,
                 name,
                 image: imageUrl || undefined,
-                role: role, // Selected role ('driver' or 'company')
-                // additional fields if required by your auth schema
+                role,
                 ...(role === 'company' && {
                     companyName,
                     registrationNo,
@@ -132,195 +127,174 @@ export default function Signup() {
     };
 
     return (
-        <div className="relative min-h-screen w-full bg-[#f4f7fa] flex flex-col items-center justify-between p-6 overflow-hidden">
-
-            {/* BACKGROUND GLOW EFFECTS */}
-            <div className="absolute top-[-25%] right-[-15%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-blue-600 via-indigo-500/40 to-transparent blur-[90px] pointer-events-none" />
-            <div className="absolute bottom-[-20%] left-[-15%] w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-orange-600 via-amber-500/35 to-transparent blur-[100px] pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
-
-            {/* TOP BRAND LOGO & HEADER */}
-            <div className="relative z-10 flex flex-col items-center text-center mt-4 mb-2">
-                <div className="flex items-center gap-2 text-blue-600">
-                    <FiZap size={28} className="fill-blue-600" />
-                    <span className="text-2xl font-bold text-slate-900 tracking-tight">VoltNet</span>
-                </div>
-                <p className="text-xs font-medium text-slate-500 max-w-xs mt-2 leading-relaxed">
-                    The next generation of enterprise EV fleet management and charging infrastructure.
-                </p>
-            </div>
-
-            {/* CONTENT CARD */}
-            <Card className="relative z-10 p-6 md:p-8 bg-white/95 backdrop-blur-lg border border-slate-200/80 shadow-2xl shadow-slate-900/10 rounded-2xl w-full max-w-[500px] my-auto">
-                <div className="mb-5">
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">Create an Account</h2>
-                    <p className="text-xs text-slate-400 mt-1">Get started with managing your charging fleet or driving EV today.</p>
-                </div>
-
-                <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
+        <div className="min-h-screen w-full bg-[#f8fafc] flex items-center justify-center p-4 sm:p-6 md:p-10">
+            {/* Main Container */}
+            <div className="w-full max-w-[960px] bg-white rounded-3xl shadow-2xl shadow-slate-200/80 overflow-hidden grid grid-cols-1 md:grid-cols-12 border border-slate-100">
+                
+                {/* ─── LEFT SIDE: DARK BRANDING PANEL ─── */}
+                <div className="md:col-span-5 bg-[#0f172a] p-8 sm:p-12 flex flex-col justify-between text-white relative overflow-hidden">
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-blue-600/20 rounded-full blur-2xl pointer-events-none" />
                     
-                    {/* ─── NEXT IMAGE UPLOAD ─── */}
-                    <div className="flex flex-col items-center justify-center mb-2">
-                        <label className="relative group cursor-pointer w-24 h-24 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden flex flex-col items-center justify-center hover:border-blue-500 hover:bg-slate-100/50 transition-all shadow-sm">
-                            
-                            {imagePreview ? (
-                                <Image 
-                                    src={imagePreview}
-                                    alt="Profile Preview" 
-                                    fill
-                                    className="object-cover rounded-2xl"
-                                    unoptimized
-                                />
-                            ) : (
-                                <div className="flex flex-col items-center text-center p-2 z-10">
-                                    <FiCamera size={20} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
-                                    <span className="text-[10px] font-semibold text-slate-400 mt-1 group-hover:text-blue-500">Upload</span>
-                                </div>
-                            )}
-                            
-                            <input 
-                                type="file" 
-                                name="image"
-                                accept="image/*" 
-                                className="hidden" 
-                                onChange={handleImageChange}
-                            />
-
-                            {imagePreview && (
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-2xl z-20">
-                                    <FiCamera size={18} className="text-white" />
-                                </div>
-                            )}
-                        </label>
-                        <span className="text-[11px] font-medium text-slate-400 mt-1.5">Profile Photo</span>
+                    {/* Brand Logo */}
+                    <div className="relative z-10 flex items-center gap-2.5">
+                        <div className="p-2 bg-blue-600/20 border border-blue-500/30 rounded-xl">
+                            <FiZap size={22} className="text-blue-500 fill-blue-500" />
+                        </div>
+                        <span className="text-xl font-bold tracking-tight text-white">VoltNet</span>
                     </div>
 
-                    {/* ─── ACCOUNT TYPE / ROLE SELECTION ─── */}
-                    <div className="flex flex-col gap-2 bg-slate-50/80 p-3 rounded-xl border border-slate-200/80">
-                        <Label className="text-xs font-semibold text-slate-700">Account Type</Label>
+                    {/* Brand Text Content */}
+                    <div className="relative z-10 my-8">
+                        <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+                            Join the next-gen EV charging network.
+                        </h2>
+                        <p className="mt-4 text-xs sm:text-sm text-slate-400 font-normal leading-relaxed">
+                            Create an account to manage your EV fleets, schedule smart charging sessions, and seamlessly track energy metrics.
+                        </p>
+                    </div>
+
+                    {/* Left Footer Info */}
+                    <div className="relative z-10 text-[11px] text-slate-500 font-medium">
+                        © 2026 VoltNet Inc. All rights reserved.
+                    </div>
+                </div>
+
+                {/* ─── RIGHT SIDE: FORM PANEL ─── */}
+                <div className="md:col-span-7 p-8 sm:p-10 flex flex-col justify-center bg-white overflow-y-auto max-h-[85vh] md:max-h-none">
+                    
+                    {/* Header Tabs */}
+                    <div className="flex items-center gap-6 mb-6 border-b border-slate-100 pb-3">
+                        <Link href="/auth/signin" className="text-sm font-semibold text-slate-400 hover:text-slate-600 transition-colors">
+                            Login
+                        </Link>
+                        <button className="text-sm font-bold text-blue-600 border-b-2 border-blue-600 -mb-3 pb-3">
+                            Register
+                        </button>
+                    </div>
+
+                    <Form className="flex flex-col gap-3.5" onSubmit={onSubmit}>
+                        
+                        {/* Profile Image Avatar Upload */}
+                        <div className="flex items-center gap-4 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+                            <label className="relative group cursor-pointer w-12 h-12 bg-white border border-slate-300 rounded-xl overflow-hidden flex items-center justify-center hover:border-blue-500 transition-all shrink-0">
+                                {imagePreview ? (
+                                    <Image src={imagePreview} alt="Preview" fill className="object-cover" unoptimized />
+                                ) : (
+                                    <FiCamera size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                                )}
+                                <input type="file" name="image" accept="image/*" className="hidden" onChange={handleImageChange} />
+                            </label>
+                            <div>
+                                <span className="text-xs font-semibold text-slate-700 block">Profile Picture</span>
+                                <span className="text-[10px] text-slate-400 block">PNG, JPG or WEBP (Optional)</span>
+                            </div>
+                        </div>
+
+                        {/* Fixed Account Role Radio Group */}
                         <RadioGroup 
                             value={role} 
-                            onChange={(val: any) => setRole(typeof val === 'string' ? val : val.target.value)} 
-                            name="role" 
+                            onChange={(val: string) => setRole(val)} 
                             orientation="horizontal"
-                            className="flex gap-3"
+                            className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5"
                         >
-                            <Radio value="driver" className="flex-1 cursor-pointer">
-                                <Radio.Content>
-                                    <Radio.Control>
-                                        <Radio.Indicator />
-                                    </Radio.Control>
-                                    <span className="text-xs font-bold text-slate-800">EV Driver</span>
-                                </Radio.Content>
-                                <Description className="text-[10px] text-slate-400">Personal EV User</Description>
-                            </Radio>
-
-                            <Radio value="company" className="flex-1 cursor-pointer">
-                                <Radio.Content>
-                                    <Radio.Control>
-                                        <Radio.Indicator />
-                                    </Radio.Control>
-                                    <span className="text-xs font-bold text-slate-800">Fleet Company</span>
-                                </Radio.Content>
-                                <Description className="text-[10px] text-slate-400">Enterprise / Operator</Description>
-                            </Radio>
+                            <Label className="text-xs font-semibold text-slate-700">Account Type</Label>
+                            <div className="flex gap-6 items-center pt-0.5">
+                                <Radio value="driver" className="cursor-pointer">
+                                    <span className="text-xs text-slate-800 font-medium">EV Driver</span>
+                                </Radio>
+                                <Radio value="company" className="cursor-pointer">
+                                    <span className="text-xs text-slate-800 font-medium">Fleet Company</span>
+                                </Radio>
+                            </div>
                         </RadioGroup>
-                    </div>
 
-                    {/* Full Name Field */}
-                    <TextField isRequired name="name" type="text">
-                        <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Full Name</span>
-                        <Input placeholder="John Doe" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
+                        {/* Full Name */}
+                        <TextField isRequired name="name" type="text">
+                            <span className="text-xs font-semibold text-slate-700 mb-1 block">Full Name</span>
+                            <Input 
+                                placeholder="John Doe" 
+                                className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                            />
+                            <FieldError className="text-xs text-rose-500 mt-1" />
+                        </TextField>
 
-                    {/* DYNAMIC COMPANY FIELDS */}
-                    {role === "company" && (
-                        <div className="flex flex-col gap-3 p-3 bg-blue-50/50 border border-blue-100 rounded-xl">
-                            <TextField isRequired name="companyName" type="text">
-                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Company / Fleet Name</span>
-                                <Input placeholder="EcoCharge Fleet Ltd." className="bg-white border border-slate-200 rounded-xl text-sm" />
+                        {/* Conditional Company Fields */}
+                        {role === "company" && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-blue-50/40 border border-blue-100 rounded-xl">
+                                <TextField isRequired name="companyName" type="text">
+                                    <span className="text-xs font-semibold text-slate-700 mb-1 block">Company Name</span>
+                                    <Input placeholder="EcoCharge Ltd." className="bg-white border border-slate-200 rounded-xl text-sm py-1.5 px-3" />
+                                </TextField>
+                                <TextField isRequired name="registrationNo" type="text">
+                                    <span className="text-xs font-semibold text-slate-700 mb-1 block">Reg. Number</span>
+                                    <Input placeholder="REG-10928" className="bg-white border border-slate-200 rounded-xl text-sm py-1.5 px-3" />
+                                </TextField>
+                            </div>
+                        )}
+
+                        {/* Email Address */}
+                        <TextField isRequired name="email" type="email">
+                            <span className="text-xs font-semibold text-slate-700 mb-1 block">E-mail Address</span>
+                            <Input 
+                                placeholder="user@voltnet.com" 
+                                className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                            />
+                            <FieldError className="text-xs text-rose-500 mt-1" />
+                        </TextField>
+
+                        {/* Password Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <TextField isRequired name="password" type="password">
+                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Password</span>
+                                <Input 
+                                    placeholder="••••••••" 
+                                    className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                                />
                                 <FieldError className="text-xs text-rose-500 mt-1" />
                             </TextField>
 
-                            <TextField isRequired name="registrationNo" type="text">
-                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Business Registration No.</span>
-                                <Input placeholder="REG-892341" className="bg-white border border-slate-200 rounded-xl text-sm" />
+                            <TextField isRequired name="confirmPassword" type="password">
+                                <span className="text-xs font-semibold text-slate-700 mb-1 block">Confirm Password</span>
+                                <Input 
+                                    placeholder="••••••••" 
+                                    className="bg-slate-50 border border-slate-200 focus:border-blue-600 focus:bg-white rounded-xl text-sm py-2 px-3 transition-all" 
+                                />
                                 <FieldError className="text-xs text-rose-500 mt-1" />
                             </TextField>
                         </div>
-                    )}
 
-                    {/* Email Field */}
-                    <TextField isRequired name="email" type="email">
-                        <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Email Address</span>
-                        <Input placeholder="user@domain.com" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
-
-                    {/* Password Field */}
-                    <TextField isRequired name="password" type="password">
-                        <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Password</span>
-                        <Input placeholder="••••••••" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
-
-                    {/* Confirm Password Field */}
-                    <TextField isRequired name="confirmPassword" type="password">
-                        <span className="text-xs font-semibold text-slate-700 mb-1.5 block">Confirm Password</span>
-                        <Input placeholder="••••••••" className="bg-slate-50 border border-slate-200 rounded-xl text-sm" />
-                        <FieldError className="text-xs text-rose-500 mt-1" />
-                    </TextField>
-
-                    {/* Submit Button */}
-                    <Button
-                        className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 rounded-xl shadow-sm transition-colors text-sm flex items-center justify-center gap-2"
-                        type="submit"
-                        isDisabled={isLoading}
-                    >
-                        {isLoading ? "Creating Account..." : "Get Started"}
-                    </Button>
-
-                    {/* Visual Separator Divider */}
-                    <div className="flex items-center my-1 w-full">
-                        <hr className="flex-1 border-slate-200" />
-                        <span className="px-3 text-[10px] font-bold uppercase text-slate-400 tracking-wider shrink-0">
-                            Or Sign Up With
-                        </span>
-                        <hr className="flex-1 border-slate-200" />
-                    </div>
-
-                    {/* Social Google & Signin Redirect */}
-                    <div className="flex flex-col gap-3 w-full">
+                        {/* Submit Button */}
                         <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full h-11 border-slate-200 rounded-xl font-semibold text-slate-600 text-sm bg-white hover:bg-slate-50 transition-colors flex items-center justify-center"
-                            onClick={handleGoogleLogin}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-11 rounded-xl shadow-md shadow-blue-600/20 transition-all text-sm mt-2"
+                            type="submit"
+                            isDisabled={isLoading}
                         >
-                            <FcGoogle size={20} className="mr-2" /> Google
+                            {isLoading ? "Creating Account..." : "Create Account"}
                         </Button>
 
-                        <p className="text-center text-xs text-slate-500 mt-1">
-                            Already have an account?{" "}
-                            <a href="/signin" className="text-blue-600 font-semibold hover:underline">
-                                Sign In
-                            </a>
-                        </p>
-                    </div>
-                </Form>
-            </Card>
+                        {/* Social Separator */}
+                        <div className="relative flex py-2 items-center mt-1">
+                            <div className="flex-grow border-t border-slate-100"></div>
+                            <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                Or register with
+                            </span>
+                            <div className="flex-grow border-t border-slate-100"></div>
+                        </div>
 
-            {/* FOOTER SECTION */}
-            <div className="relative z-10 flex flex-col items-center gap-1.5 mt-6 mb-2 select-none">
-                <div className="flex items-center gap-4 text-[11px] font-medium text-slate-400">
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Documentation</span>
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Security</span>
-                    <span className="hover:text-slate-600 cursor-pointer transition-colors">Support</span>
+                        {/* Social Media Buttons */}
+                        <div className="flex items-center justify-start gap-3">
+                            <button
+                                type="button"
+                                onClick={handleGoogleLogin}
+                                className="w-10 h-10 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-slate-100 transition-colors shadow-xs"
+                                title="Sign up with Google"
+                            >
+                                <FcGoogle size={20} />
+                            </button>
+                        </div>
+                    </Form>
                 </div>
-                <p className="text-[10px] text-slate-400/80">
-                    © 2026 VoltNet Infrastructure Inc. All rights reserved.
-                </p>
+
             </div>
         </div>
     );
