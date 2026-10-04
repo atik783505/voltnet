@@ -27,7 +27,6 @@ export default function FleetSection() {
                 {/* Section Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                     
-                    {/* Left Column - Content & Branding */}
                     <div className="lg:col-span-5 space-y-6">
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider">
                             <Truck className="w-3.5 h-3.5" /> Fleet Management
