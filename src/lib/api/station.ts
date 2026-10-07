@@ -7,3 +7,6 @@ export const getAllStations = async (queryParams: string = '') => {
 export const getStation = async (stationId: string) => {
   return await serverFetch(`/api/stations/${stationId}`, false);
 }
+export const getCompanyStations = async (companyId: string) => {
+  return await serverFetch(`/api/companyStations/${companyId}`, false);
+}

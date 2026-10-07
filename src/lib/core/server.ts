@@ -48,8 +48,6 @@ export const serverMutation = async <T = any, R = any>(
     data?: T, 
     method: 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'POST'
 ): Promise<R> => {
-    // টোকেন সংক্রান্ত লজিক আপাতত বন্ধ রাখা হয়েছে
-    // const token = await getToken();
 
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',

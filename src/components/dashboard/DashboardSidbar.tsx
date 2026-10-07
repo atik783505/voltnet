@@ -8,6 +8,7 @@ import {
     LuLayoutDashboard, LuMenu, LuMapPin, LuHistory,
     LuZap, LuUsers, LuShieldAlert, LuLogOut,
     LuBuilding,
+    LuPlus,
 } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import type { IconType } from "react-icons";
@@ -59,7 +60,8 @@ export function DashboardSidebar() {
         ],
         company: [
             { name: "Overview", href: "/dashboard/company", icon: LuLayoutDashboard },
-            { name: "Fleet Management", href: "/dashboard/company/fleets", icon: LuBuilding },
+            { name: "Fleet Management", href: "/dashboard/company/stations", icon: LuBuilding },
+            { name: "Add Fleet", href: "/dashboard/company/stations/add", icon: LuPlus },
             { name: "Charging Sessions", href: "/dashboard/company/bookings", icon: LuZap },
             { name: "Transactions", href: "/dashboard/company/transactions", icon: LuHistory },
         ],

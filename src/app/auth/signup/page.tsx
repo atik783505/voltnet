@@ -190,23 +190,34 @@ export default function Signup() {
                             </div>
                         </div>
 
-                        {/* Fixed Account Role Radio Group */}
-                        <RadioGroup 
-                            value={role} 
-                            onChange={(val: string) => setRole(val)} 
-                            orientation="horizontal"
-                            className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5"
-                        >
+                        {/* Account Role Radio Group with Sub-components */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
                             <Label className="text-xs font-semibold text-slate-700">Account Type</Label>
-                            <div className="flex gap-6 items-center pt-0.5">
+                            <RadioGroup 
+                                value={role} 
+                                onChange={(val: any) => setRole(typeof val === 'string' ? val : val.target.value)} 
+                                orientation="horizontal"
+                                className="flex gap-6 items-center pt-1"
+                            >
                                 <Radio value="driver" className="cursor-pointer">
-                                    <span className="text-xs text-slate-800 font-medium">EV Driver</span>
+                                    <Radio.Content className="flex items-center gap-2 text-xs text-slate-800 font-medium">
+                                        <Radio.Control>
+                                            <Radio.Indicator />
+                                        </Radio.Control>
+                                        EV Driver
+                                    </Radio.Content>
                                 </Radio>
+
                                 <Radio value="company" className="cursor-pointer">
-                                    <span className="text-xs text-slate-800 font-medium">Fleet Company</span>
+                                    <Radio.Content className="flex items-center gap-2 text-xs text-slate-800 font-medium">
+                                        <Radio.Control>
+                                            <Radio.Indicator />
+                                        </Radio.Control>
+                                        Fleet Company
+                                    </Radio.Content>
                                 </Radio>
-                            </div>
-                        </RadioGroup>
+                            </RadioGroup>
+                        </div>
 
                         {/* Full Name */}
                         <TextField isRequired name="name" type="text">
